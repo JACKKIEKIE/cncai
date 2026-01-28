@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Vision CNC Pro - 部署稳定版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #05070a; color: #e2e8f0; font-family: sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); }
+        .sim-grid { background-color: #0a0c10; background-image: radial-gradient(#1e293b 1px, transparent 1px); background-size: 20px 20px; }
+    </style>
+</head>
+<body class="p-6">
+<div class="max-w-6xl mx-auto">
+    <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+        <h1 class="text-2xl font-black text-cyan-400 italic">CNC AI <span class="text-white font-sans">VISION</span></h1>
+        <div class="text-[10px] text-slate-500 font-mono">Cloudflare Pages Deployment</div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="glass p-6 rounded-3xl space-y-4 shadow-2xl">
+            <div id="drop-zone" class="border-2 border-dashed border-slate-700 rounded-2xl p-8 text-center hover:border-cyan-500 cursor-pointer transition-all">
+                <input type="file" id="file-input" class="hidden" accept="image/*,application/pdf">
+                <p id="file-label" class="text-sm text-slate-500 italic">上传 PDF 图纸或加工草图照片</p>
+            </div>
+            <textarea id="user-text" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-white focus:border-cyan-500 outline-none" placeholder="描述加工需求..."></textarea>
+            <button id="run-btn" class="w-full py-4 bg-cyan-600 hover:bg-cyan-500 text-black font-black rounded-xl transition-all shadow-lg">
+                🚀 生成西门子 G 代码
+            </button>
+            <div id="log-win" class="bg-black/50 p-4 rounded-xl h-32 overflow-y-auto font-mono text-[10px] text-slate-400 border border-slate-800">
+                > 系统准备就绪...
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="sim-grid rounded-3xl h-64 border border-slate-800 flex items-center justify-center">
+                <canvas id="sim-canvas" width="600" height="300" class="w-full h-full"></canvas>
+            </div>
+            <div class="glass rounded-3xl p-6 border border-slate-800 shadow-inner">
+                <pre id="gcode-view" class="text-green-400 text-[11px] font-mono leading-relaxed h-48 overflow-auto italic">/* 等待生成... */</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const logWin = document.getElementById('log-win');
+    function addLog(msg) {
+        logWin.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${msg}</div>`;
+        logWin.scrollTop = logWin.scrollHeight;
+    }
+
+    let fileData = { base64: null, mimeType: null };
+
+    document.getElementById('drop-zone').onclick = () => document.getElementById('file-input').click();
+    document.getElementById('file-input').onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (f) => {
+            fileData.base64 = f.target.result.split(',')[1];
+            fileData.mimeType = file.type;
+            document.getElementById('file-label').innerText = "已加载: " + file.name;
+        };
+        reader.readAsDataURL(file);
+    };
+
+    document.getElementById('run-btn').onclick = async () => {
+        const btn = document.getElementById('run-btn');
+        btn.disabled = true;
+        addLog("正在通过 Cloudflare Functions 发起 AI 请求...");
+
+        try {
+            // 注意：这里请求的是我们自己的后台接口
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text: document.getElementById('user-text').value,
+                    image: fileData.base64,
+                    mimeType: fileData.mimeType
+                })
+            });
+
+            const result = await res.json();
+            if (result.error) throw new Error(result.error);
+
+            const data = result.data;
+            addLog("AI 解析成功，正在生成代码...");
+
+            let mpf = `%_N_X_AI_PROG_MPF\n;$PATH=/_N_MPF_DIR\n; Part: ${data.part || 'AI_PART'}\nG17 G90 G54 G710\nT="CUTTER_10" M6\nS2500 M3\n`;
+            data.features.forEach(f => {
+                mpf += `G0 X${f.x} Y${f.y} Z5\n`;
+                if(f.type === 'circle') {
+                    mpf += `POCKET4(10, 0, 2, -${f.z}, ${f.d/2}, 0, ${f.f}, ${f.f}, 0, 21, 2, 0, 0, 0)\n`;
+                } else {
+                    mpf += `POCKET3(10, 0, 2, -${f.z}, ${f.w}, ${f.h}, 0, ${f.x}, ${f.y}, 0, ${f.f}, ${f.f}, 0, 21, 2, 0, 0, 0, 0, 0)\n`;
+                }
+            });
+            mpf += `G0 Z100\nM30`;
+            document.getElementById('gcode-view').innerText = mpf;
+
+            // 简单画图预览
+            const ctx = document.getElementById('sim-canvas').getContext('2d');
+            ctx.clearRect(0, 0, 600, 300);
+            ctx.strokeStyle = '#22d3ee';
+            data.features.forEach(f => {
+                ctx.beginPath();
+                ctx.arc(300 + (f.x - 50)*2, 150 - (f.y - 50)*2, (f.d||f.w)*1.5, 0, Math.PI*2);
+                ctx.stroke();
+            });
+
+        } catch (e) {
+            addLog("失败: " + e.message, "text-red-500");
+        } finally {
+            btn.disabled = false;
+        }
+    };
+</script>
+</body>
+</html>
