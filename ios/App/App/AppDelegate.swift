@@ -7,7 +7,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Keep the native shell visually aligned with the light liquid-glass look before the web layer appears.
+        DispatchQueue.main.async {
+            self.window?.backgroundColor = UIColor(red: 0.93, green: 0.96, blue: 1.0, alpha: 1.0)
+        }
         return true
     }
 

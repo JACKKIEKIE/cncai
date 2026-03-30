@@ -12,21 +12,68 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <imageView key="view" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" id="snD-IY-ifK">
+                    <view key="view" contentMode="scaleToFill" id="iN0-l3-epB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </imageView>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w9s-pF-Q7r">
+                                <rect key="frame" x="127.5" y="225" width="120" height="120"/>
+                                <color key="backgroundColor" red="0.03921568627" green="0.5176470588" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="2O8-qH-LzP"/>
+                                    <constraint firstAttribute="height" constant="120" id="NCh-Bf-qSd"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="LC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZd-c8-l4P">
+                                <rect key="frame" x="145.5" y="258" width="84" height="54"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="34"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="AI CNC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4J-5H-zQx">
+                                <rect key="frame" x="155" y="369" width="65" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                <color key="textColor" red="0.3921568627" green="0.4705882353" blue="0.5960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="LinguaCNC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wN0-Pz-9vc">
+                                <rect key="frame" x="108" y="392" width="159" height="34"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
+                                <color key="textColor" red="0.05882352941" green="0.09019607843" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="iPhone CNC Workspace" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YeP-2x-ow1">
+                                <rect key="frame" x="111" y="434" width="154" height="19"/>
+                                <fontDescription key="fontDescription" type="system" weight="regular" pointSize="15"/>
+                                <color key="textColor" red="0.3921568627" green="0.4705882353" blue="0.5960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+                        <color key="backgroundColor" red="0.9333333333" green="0.9568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="w9s-pF-Q7r" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="0BW-FK-8nP"/>
+                            <constraint firstItem="c4J-5H-zQx" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2D0-0b-hXy"/>
+                            <constraint firstItem="YeP-2x-ow1" firstAttribute="top" secondItem="wN0-Pz-9vc" secondAttribute="bottom" constant="8" id="9an-c2-EtY"/>
+                            <constraint firstItem="dZd-c8-l4P" firstAttribute="centerY" secondItem="w9s-pF-Q7r" secondAttribute="centerY" id="D8W-yI-jlM"/>
+                            <constraint firstItem="w9s-pF-Q7r" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="181" id="HnC-Cg-wGN"/>
+                            <constraint firstItem="wN0-Pz-9vc" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="L2F-Ky-HlJ"/>
+                            <constraint firstItem="YeP-2x-ow1" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="N8K-oS-d9H"/>
+                            <constraint firstItem="dZd-c8-l4P" firstAttribute="centerX" secondItem="w9s-pF-Q7r" secondAttribute="centerX" id="SZ8-Bu-Y9J"/>
+                            <constraint firstItem="wN0-Pz-9vc" firstAttribute="top" secondItem="c4J-5H-zQx" secondAttribute="bottom" constant="6" id="UNx-4m-SNa"/>
+                            <constraint firstItem="c4J-5H-zQx" firstAttribute="top" secondItem="w9s-pF-Q7r" secondAttribute="bottom" constant="24" id="dYm-Fs-PjE"/>
+                        </constraints>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="Splash" width="1366" height="1366"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>
