@@ -4,7 +4,7 @@
   "type": "module",
   "main": "electron-main.cjs",
   "author": "LinguaCNC Open Source Community <jackoikpig@gmail.com>",
-  "description": "面向中文制造场景的 AI 数控编程与 3D 仿真应用",
+  "description": "AI CNC programming and 3D simulation app for manufacturing workflows.",
   "scripts": {
     "dev": "vite",
     "start": "vite preview",
@@ -75,7 +75,7 @@
   },
   "build": {
     "appId": "com.linguacnc.app",
-    "productName": "灵语智造",
+    "productName": "LinguaCNC",
     "directories": {
       "output": "release"
     },

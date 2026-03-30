@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.linguacnc.app',
-  appName: '灵语智造',
+  appName: 'LinguaCNC',
   webDir: 'dist',
   server: {
     androidScheme: 'https',
