@@ -10,6 +10,7 @@ import SetupSheet, { SetupSheetContent } from './components/SetupSheet';
 import SimulationPanel from './components/SimulationPanel';
 import ToolLibrary from './components/ToolLibrary';
 import { bootstrapNativePermissions } from './services/nativePermissionService';
+import { hasNativeIOSShell, postNativeShellMessage } from './services/nativeRuntimeService';
 import {
   buildSessionFromState,
   createTool,
@@ -150,6 +151,7 @@ const App: React.FC = () => {
   const [isAboutSheetOpen, setIsAboutSheetOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   const [pendingDeleteOperationIndex, setPendingDeleteOperationIndex] = useState<number | null>(null);
+  const [isNativeIOSShellEnabled, setIsNativeIOSShellEnabled] = useState(() => hasNativeIOSShell());
 
   const saveTimerRef = useRef<number | null>(null);
   const auditTimerRef = useRef<number | null>(null);
@@ -176,8 +178,12 @@ const App: React.FC = () => {
   }, [customPath, effectiveCncData]);
   const liveAvailable = providers.find((provider) => provider.key === 'gemini')?.enabled ?? false;
   const hasMobileConversation = messages.length > 0;
-  const showMobileCompactHeader = mobileView !== 'task';
-  const mobileContentBottomPadding = hasMobileConversation ? 'calc(env(safe-area-inset-bottom) + 5.45rem)' : 'calc(env(safe-area-inset-bottom) + 6.9rem)';
+  const showMobileCompactHeader = !isNativeIOSShellEnabled && mobileView !== 'task';
+  const mobileContentBottomPadding = isNativeIOSShellEnabled
+    ? 'calc(env(safe-area-inset-bottom) + 7.35rem)'
+    : hasMobileConversation
+      ? 'calc(env(safe-area-inset-bottom) + 5.45rem)'
+      : 'calc(env(safe-area-inset-bottom) + 6.9rem)';
   const pendingDeleteOperation = pendingDeleteOperationIndex != null ? effectiveOperations[pendingDeleteOperationIndex] : null;
   const mobileWorkspaceMeta =
     mobileView === 'sim'
@@ -208,6 +214,37 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = window.setTimeout(() => setIsSplashVisible(false), 1350);
     return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleNativeShellAvailability = () => setIsNativeIOSShellEnabled(hasNativeIOSShell());
+    const handleNativeNavigate = (event: Event) => {
+      const nextView = (event as CustomEvent<{ view?: MobileView }>).detail?.view;
+      if (!nextView) return;
+      setMobileView(nextView);
+    };
+    const handleNativeHistory = () => setIsHistoryOpen(true);
+    const handleNativeAbout = () => setIsAboutSheetOpen(true);
+    const handleNativeSetup = () => setMobileView('setup');
+    const handleNativeReset = () => handleReset();
+
+    window.addEventListener('linguacnc:native-shell-availability', handleNativeShellAvailability);
+    window.addEventListener('linguacnc:navigate', handleNativeNavigate as EventListener);
+    window.addEventListener('linguacnc:open-history', handleNativeHistory);
+    window.addEventListener('linguacnc:open-about', handleNativeAbout);
+    window.addEventListener('linguacnc:open-setup', handleNativeSetup);
+    window.addEventListener('linguacnc:reset', handleNativeReset);
+
+    handleNativeShellAvailability();
+
+    return () => {
+      window.removeEventListener('linguacnc:native-shell-availability', handleNativeShellAvailability);
+      window.removeEventListener('linguacnc:navigate', handleNativeNavigate as EventListener);
+      window.removeEventListener('linguacnc:open-history', handleNativeHistory);
+      window.removeEventListener('linguacnc:open-about', handleNativeAbout);
+      window.removeEventListener('linguacnc:open-setup', handleNativeSetup);
+      window.removeEventListener('linguacnc:reset', handleNativeReset);
+    };
   }, []);
 
   useEffect(() => {
@@ -258,6 +295,18 @@ const App: React.FC = () => {
       persistSession();
     }, 360);
   }, [isReady, messages, cncData, operations, currentStock, mode, activeProviderKey]);
+
+  useEffect(() => {
+    if (!isNativeIOSShellEnabled) {
+      return;
+    }
+
+    postNativeShellMessage({
+      type: 'viewChange',
+      view: mobileView,
+      hasConversation: messages.length > 0
+    });
+  }, [isNativeIOSShellEnabled, messages.length, mobileView]);
 
   useEffect(() => {
     if (!isStageInfoOpen) return;
@@ -807,7 +856,7 @@ const App: React.FC = () => {
       <div
         className="relative flex h-full min-h-0 flex-col p-3 lg:p-5"
         style={{
-          paddingTop: 'max(12px, calc(env(safe-area-inset-top) + 10px))',
+          paddingTop: isNativeIOSShellEnabled ? 'max(84px, calc(env(safe-area-inset-top) + 72px))' : 'max(12px, calc(env(safe-area-inset-top) + 10px))',
           paddingLeft: 'max(12px, calc(env(safe-area-inset-left) + 12px))',
           paddingRight: 'max(12px, calc(env(safe-area-inset-right) + 12px))'
         }}
@@ -996,6 +1045,7 @@ const App: React.FC = () => {
                     onUseDemo={() => handleSendMessage(DEMO_PROMPT, null, model, 'GENERATE')}
                     onOpenAbout={() => setIsAboutSheetOpen(true)}
                     layoutMode={hasMobileConversation ? 'mobile-conversation' : 'mobile-empty'}
+                    nativeShellEnabled={isNativeIOSShellEnabled}
                   />
                 ) : mobileView === 'sim' ? (
                   <SimulationPanel data={effectiveCncData} customPath={effectiveCustomPath} />
@@ -1018,7 +1068,8 @@ const App: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          <div className="pointer-events-none fixed inset-x-0 z-40 flex justify-center" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}>
+          {!isNativeIOSShellEnabled ? (
+            <div className="pointer-events-none fixed inset-x-0 z-40 flex justify-center" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}>
             <div className={`liquid-glass-nav pointer-events-auto flex w-[min(94vw,520px)] items-center justify-between rounded-[2.2rem] ${hasMobileConversation ? 'px-2.5 py-2.5' : 'px-3.5 py-3.5'}`}>
               {mobileTabs.map((item) => (
                 <button
@@ -1043,7 +1094,8 @@ const App: React.FC = () => {
                 </button>
               ))}
             </div>
-          </div>
+            </div>
+          ) : null}
         </div>
 
       </div>

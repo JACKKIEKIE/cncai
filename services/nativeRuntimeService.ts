@@ -2,6 +2,15 @@ import { Capacitor } from '@capacitor/core';
 
 const NATIVE_RUNTIME_CACHE_KEY = 'native-runtime-cache-reset-v2';
 
+declare global {
+  interface Window {
+    __LINGUACNC_NATIVE_SHELL__?: boolean;
+    webkit?: {
+      messageHandlers?: Record<string, { postMessage: (payload: unknown) => void }>;
+    };
+  }
+}
+
 export function isNativeApp() {
   return Capacitor.isNativePlatform();
 }
@@ -12,6 +21,26 @@ export function isNativeIOSApp() {
 
 export function isNativeAndroidApp() {
   return isNativeApp() && Capacitor.getPlatform() === 'android';
+}
+
+export function hasNativeIOSShell() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return false;
+  }
+
+  return isNativeIOSApp() && (Boolean(window.__LINGUACNC_NATIVE_SHELL__) || document.documentElement.dataset.nativeShell === 'ios');
+}
+
+export function postNativeShellMessage(payload: Record<string, unknown>) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.webkit?.messageHandlers?.linguacncShell?.postMessage(payload);
+  } catch (error) {
+    console.warn('Failed to post native shell message.', error);
+  }
 }
 
 function applyDocumentRuntimeState() {

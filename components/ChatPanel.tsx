@@ -34,6 +34,7 @@ interface ChatPanelProps {
   onUseDemo: () => void;
   onOpenAbout?: () => void;
   layoutMode?: ChatPanelLayoutMode;
+  nativeShellEnabled?: boolean;
 }
 
 const MODEL_OPTIONS: Array<{ value: ModelOption; label: string; description: string }> = [
@@ -42,7 +43,7 @@ const MODEL_OPTIONS: Array<{ value: ModelOption; label: string; description: str
   { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', description: '响应更快，适合日常生成与试跑。' },
   { value: 'qwen-plus', label: '通义千问 Plus', description: '国内访问更稳定，适合常规加工问答。' },
   { value: 'qwen3.5-plus', label: '通义千问 3.5 Plus', description: '结构化输出更稳，适合流程整理。' },
-  { value: 'mimo-v2-flash', label: '小米 MiMo', description: '轻量快速，适合短文本与即时反馈。' }
+  { value: 'mimo-v2-flash', label: '小米 MiMo', description: '轻量快捷，适合短文本与即时反馈。' }
 ];
 
 function formatSavedAt(value: number | null) {
@@ -81,7 +82,8 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   onStartLiveSession,
   onUseDemo,
   onOpenAbout,
-  layoutMode = 'default'
+  layoutMode = 'default',
+  nativeShellEnabled = false
 }) => {
   const [inputText, setInputText] = useState('');
   const [attachment, setAttachment] = useState<Attachment | null>(null);
@@ -99,6 +101,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   const hasConversation = messages.length > 0;
   const isMobileConversationLayout = layoutMode === 'mobile-conversation';
   const isMobileEmptyLayout = layoutMode === 'mobile-empty';
+  const shouldShowCompactChrome = !nativeShellEnabled;
   const usesAboutSheet = Boolean(onOpenAbout);
   const currentModel = getModelOption(model);
   const enabledProviders = useMemo(() => providers.filter((provider) => provider.enabled), [providers]);
@@ -217,7 +220,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
     <div className="glass-panel relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[2.05rem] border border-white/85 bg-[linear-gradient(180deg,rgba(255,255,255,0.975),rgba(255,255,255,0.94))] shadow-[0_16px_36px_-20px_rgba(31,38,135,0.1)] backdrop-blur-[48px]">
       <input ref={fileInputRef} type="file" accept="image/*,.pdf,.step,.stp,.dxf,.dwg,.zip" className="hidden" onChange={handleFileChange} />
 
-      {hasConversation ? (
+      {hasConversation && shouldShowCompactChrome ? (
         <div className={`border-b border-white/60 ${isMobileConversationLayout ? 'px-3 py-2' : 'px-3 py-2.5 sm:px-5 sm:py-3.5 lg:px-6'}`}>
           <div className="flex items-center gap-2 overflow-x-auto pb-0.5">
             {onStartLiveSession ? (
@@ -282,7 +285,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
                       </span>
                       {!isMobileEmptyLayout ? (
                         <span className="min-w-0">
-                          <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-100/95">Voice</span>
+                          <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-100/95">VOICE</span>
                           <span className="block truncate text-sm font-semibold">语音模式</span>
                         </span>
                       ) : null}
@@ -290,17 +293,19 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
                   ) : null}
                 </div>
 
-                <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                  <div className="inline-flex shrink-0 items-center gap-1.5 rounded-[1.15rem] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.95))] p-1.5 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.14)] backdrop-blur-[44px]">
-                    {compactActions.map((action) => (
-                      <button key={action.label} type="button" onClick={action.onClick} title={action.label} aria-label={action.label} className="group inline-flex h-10 w-10 items-center justify-center rounded-[1rem] text-sm text-slate-500 transition-colors hover:bg-white hover:text-slate-900">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-[0.95rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,245,249,0.88))] shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_8px_16px_-12px_rgba(15,23,42,0.24)]">
-                          <i className={`${action.icon} text-sm`} />
-                        </span>
-                      </button>
-                    ))}
+                {shouldShowCompactChrome ? (
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                    <div className="inline-flex shrink-0 items-center gap-1.5 rounded-[1.15rem] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.95))] p-1.5 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.14)] backdrop-blur-[44px]">
+                      {compactActions.map((action) => (
+                        <button key={action.label} type="button" onClick={action.onClick} title={action.label} aria-label={action.label} className="group inline-flex h-10 w-10 items-center justify-center rounded-[1rem] text-sm text-slate-500 transition-colors hover:bg-white hover:text-slate-900">
+                          <span className="flex h-8 w-8 items-center justify-center rounded-[0.95rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,245,249,0.88))] shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_8px_16px_-12px_rgba(15,23,42,0.24)]">
+                            <i className={`${action.icon} text-sm`} />
+                          </span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
                 {isMobileEmptyLayout ? (
                   <div className="pt-1">
@@ -343,6 +348,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
             {messages.map((message) => {
               const isUser = message.role === 'user';
               const operationCount = message.cncResult?.operations.filter((operation) => operation.type !== MachineOperationType.GENERAL_CHAT).length || 0;
+
               return (
                 <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                   <div className={`rounded-[1.45rem] px-4 py-3 shadow-[0_10px_28px_-22px_rgba(15,23,42,0.12)] ${isMobileConversationLayout ? 'max-w-[98%]' : 'max-w-[95%] sm:max-w-[90%]'} ${isUser ? 'rounded-br-lg border border-slate-200/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] text-slate-900' : 'rounded-bl-lg border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.95))] text-slate-800'}`}>
@@ -365,6 +371,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           <div className="inline-flex items-center rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.95))] p-0.5 shadow-[0_8px_20px_-18px_rgba(15,23,42,0.12)] backdrop-blur-[44px]">
             {(['GENERATE', 'OPTIMIZE'] as PrimaryAppMode[]).map((item) => {
               const active = mode === item;
+
               return (
                 <button key={item} type="button" onClick={() => onModeChange(item)} className={`relative rounded-full text-[12px] font-medium transition-colors ${isMobileConversationLayout ? 'px-3 py-1.5' : 'px-3.5 py-1.5'} ${active ? 'text-slate-900' : 'text-slate-500'}`}>
                   {active ? <motion.span layoutId="mode-pill" className="absolute inset-0 rounded-full bg-white shadow-[0_10px_20px_-18px_rgba(15,23,42,0.18)]" transition={{ type: 'spring', stiffness: 360, damping: 32 }} /> : null}
@@ -457,6 +464,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
               <div className="mt-2 space-y-2">
                 {MODEL_OPTIONS.map((option) => {
                   const active = option.value === model;
+
                   return (
                     <button key={option.value} type="button" onClick={() => handleModelSelect(option.value)} className={`flex w-full items-start gap-3 rounded-[1.15rem] border px-3 py-3 text-left transition-all ${active ? 'border-sky-200 bg-sky-50/90 shadow-[0_14px_28px_-24px_rgba(10,132,255,0.28)]' : 'border-white/90 bg-white/92 hover:border-slate-200 hover:bg-white'}`}>
                       <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${active ? 'border-sky-400 bg-sky-500 text-white' : 'border-slate-300 bg-white text-transparent'}`}>
