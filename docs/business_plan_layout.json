@@ -1,0 +1,189 @@
+{
+  "siteUrl": "https://cnc.zaojiaqan.xyz/",
+  "cover": {
+    "eyebrow": "中国大学生创新创业大赛正式参赛版",
+    "title": "灵语智造 LinguaCNC",
+    "subtitle": "AI 数控编程与三维仿真协同平台商业计划书",
+    "summary": "本版本面向正式申报、路演答辩与项目展示，围绕项目逻辑、核心功能、技术架构、商业模式、应用场景、财务预测与成果证明进行图文重构，兼顾专业性、展示性与竞赛审美。",
+    "labels": [
+      "开源社区驱动",
+      "自然语言生成 G 代码",
+      "三维切削仿真",
+      "多端部署"
+    ],
+    "heroAsset": "assets/generated/cover-collage.png"
+  },
+  "chapters": [
+    {
+      "at": "一、执行摘要",
+      "number": "01",
+      "title": "项目总览",
+      "summary": "从项目定义、核心价值、完成度与落地逻辑出发，快速建立评审对产品与商业方向的整体认知。",
+      "asset": "assets/ppt/slides/slide-03.png"
+    },
+    {
+      "at": "四、市场痛点与需求分析",
+      "number": "02",
+      "title": "市场洞察",
+      "summary": "围绕传统 CAM 工具门槛、教学脱节、企业数字化痛点与目标用户需求，明确项目切入价值。",
+      "asset": "assets/ppt/slides/slide-06.png"
+    },
+    {
+      "at": "七、产品总体方案",
+      "number": "03",
+      "title": "产品方案",
+      "summary": "展示灵语智造从输入、理解、生成到验证、管理与导出的完整闭环，以及对教育与企业双场景的适配能力。",
+      "asset": "assets/ppt/slides/slide-10.png"
+    },
+    {
+      "at": "九、系统架构设计",
+      "number": "04",
+      "title": "技术架构",
+      "summary": "从多模型协同、结构化工序、规则引擎、三维仿真到多端部署，展现项目的工程实现路径。",
+      "asset": "assets/ppt/slides/slide-12.png"
+    },
+    {
+      "at": "十三、核心创新点",
+      "number": "05",
+      "title": "创新壁垒",
+      "summary": "从交互逻辑、技术路线、教学友好型工业体验与可持续知识积累四个层面提炼项目的核心竞争力。",
+      "asset": "assets/ppt/slides/slide-14.png"
+    },
+    {
+      "at": "十五、商业模式与收入结构",
+      "number": "06",
+      "title": "商业化路径",
+      "summary": "围绕教育版、企业版、私有化部署与服务收入设计增长路径，强调先验证、后放大的创业节奏。",
+      "asset": "assets/generated/finance-overview.png"
+    },
+    {
+      "at": "十九、营销推广方案",
+      "number": "07",
+      "title": "推广落地",
+      "summary": "通过校园样板、赛事传播、内容运营、企业试点与渠道合作形成低成本获客与高可信转化的组合路径。",
+      "asset": "assets/ppt/slides/slide-15.png"
+    },
+    {
+      "at": "二十一、团队介绍与组织分工",
+      "number": "08",
+      "title": "团队与资源",
+      "summary": "突出团队跨学科能力与项目推进机制，体现从大学生项目走向可持续创业团队的组织基础。",
+      "asset": "assets/demo/demo-home.png"
+    },
+    {
+      "at": "二十五、实施路径与里程碑",
+      "number": "09",
+      "title": "实施规划",
+      "summary": "以清晰阶段目标和里程碑安排，说明产品如何从原型打磨、样板验证走向标准化推广与商业交付。",
+      "asset": "assets/generated/roadmap-overview.png"
+    },
+    {
+      "at": "三十一、附录一：源码实现依据总览",
+      "number": "10",
+      "title": "成果证明",
+      "summary": "以源码结构、产品截图、流程图、上线 demo 和二维码等材料共同支撑项目的完成度与真实性。",
+      "asset": "assets/ppt/slides/slide-23.png"
+    }
+  ],
+  "blocks": [
+    {
+      "after": "五、用户画像与典型使用场景",
+      "type": "image",
+      "title": "典型用户与应用对象",
+      "body": "复用 PPT 中的应用对象页，将高校实训、企业工程人员与职业教育使用场景可视化呈现，增强评审对目标用户的直观理解。",
+      "asset": "assets/ppt/slides/slide-07.png"
+    },
+    {
+      "after": "六、产品定位与价值主张",
+      "type": "gallery",
+      "title": "核心功能界面一览",
+      "body": "产品不只是单点问答，而是围绕自然语言生成、三维仿真、代码编辑与工艺辅助构成完整工作台。",
+      "items": [
+        {
+          "asset": "assets/ppt/slides/slide-11.png",
+          "caption": "智能对话与代码生成"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-12.png",
+          "caption": "三维仿真切削与路径验证"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-13.png",
+          "caption": "代码编辑与程序管理"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-14.png",
+          "caption": "工艺辅助工具与刀具能力"
+        }
+      ]
+    },
+    {
+      "after": "十、AI 工序理解与多模型协同",
+      "type": "gallery",
+      "title": "产品界面与上线成果",
+      "body": "图中展示项目的真实界面表达与线上 demo 形态，体现产品已具备可访问、可展示、可传播的基础形态。",
+      "items": [
+        {
+          "asset": "assets/demo/demo-home.png",
+          "caption": "线上 demo 首页形态"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-01.png",
+          "caption": "项目介绍封面视觉语言"
+        }
+      ]
+    },
+    {
+      "after": "二十三、财务预测与核心假设",
+      "type": "image",
+      "title": "三年财务与增长测算",
+      "body": "围绕营业收入、成本费用与净利润变化做图示化表达，提升财务页的可读性与路演展示效果。",
+      "asset": "assets/generated/finance-overview.png"
+    },
+    {
+      "after": "二十五、实施路径与里程碑",
+      "type": "image",
+      "title": "阶段里程碑总览",
+      "body": "以四阶段时间轴梳理产品从原型、试点、交付到平台化增长的实施路径，辅助评审快速理解节奏安排。",
+      "asset": "assets/generated/roadmap-overview.png"
+    },
+    {
+      "after": "三十二、附录二：产品流程示例",
+      "type": "gallery",
+      "title": "工程应用流程图解",
+      "body": "选取 PPT 中的流程页，完整展示从启动、输入、分析、仿真到导出生产的典型工程闭环。",
+      "items": [
+        {
+          "asset": "assets/ppt/slides/slide-16.png",
+          "caption": "步骤一：启动与设置"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-17.png",
+          "caption": "步骤二：输入加工需求"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-18.png",
+          "caption": "步骤三：AI 分析与生成"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-19.png",
+          "caption": "步骤四：三维仿真验证"
+        },
+        {
+          "asset": "assets/ppt/slides/slide-20.png",
+          "caption": "步骤五：导出与生产"
+        }
+      ]
+    },
+    {
+      "after": "四十八、附录十八：阶段性成果展示清单",
+      "type": "website",
+      "title": "项目成果证明与官网入口",
+      "body": "项目已完成可访问 demo 部署，能够作为路演演示、课程展示与对外传播入口。通过线上入口、二维码与页面截图共同增强项目成果证明力。",
+      "asset": "assets/demo/demo-home.png",
+      "qrAsset": "assets/generated/demo-qr.png",
+      "url": "https://cnc.zaojiaqan.xyz/",
+      "footer": "项目已完成线上可访问 demo 部署，可作为评审查看与后续传播入口。"
+    }
+  ]
+}

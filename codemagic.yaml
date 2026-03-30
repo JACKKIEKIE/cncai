@@ -1,0 +1,79 @@
+workflows:
+  ios-adhoc-install:
+    name: LinguaCNC iOS Ad Hoc IPA
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_identifier: com.linguacnc.app
+      vars:
+        XCODE_WORKSPACE: "App.xcworkspace"
+        XCODE_SCHEME: "App"
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm ci
+      - name: Install CocoaPods
+        script: |
+          cd ios/App
+          pod install
+      - name: Build web assets
+        script: |
+          npm run build
+      - name: Sync Capacitor iOS shell
+        script: |
+          npx cap sync ios
+      - name: Set up iOS code signing
+        script: |
+          xcode-project use-profiles
+      - name: Build signed IPA
+        script: |
+          cd ios/App
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - ios/App/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+  ios-testflight:
+    name: LinguaCNC iOS TestFlight
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: REPLACE_WITH_YOUR_APP_STORE_CONNECT_KEY_NAME
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.linguacnc.app
+      vars:
+        XCODE_WORKSPACE: "App.xcworkspace"
+        XCODE_SCHEME: "App"
+        APP_STORE_APPLE_ID: "REPLACE_WITH_YOUR_APPLE_ID"
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm ci
+      - name: Install CocoaPods
+        script: |
+          cd ios/App
+          pod install
+      - name: Build web assets
+        script: |
+          npm run build
+      - name: Sync Capacitor iOS shell
+        script: |
+          npx cap sync ios
+      - name: Set up iOS code signing
+        script: |
+          xcode-project use-profiles
+      - name: Build signed IPA
+        script: |
+          cd ios/App
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - ios/App/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

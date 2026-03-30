@@ -1,0 +1,97 @@
+{
+  "name": "linguacnc",
+  "version": "1.0.2",
+  "type": "module",
+  "main": "electron-main.cjs",
+  "author": "LinguaCNC Open Source Community <jackoikpig@gmail.com>",
+  "description": "面向中文制造场景的 AI 数控编程与 3D 仿真应用",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite preview",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron:dev": "npm run build && electron .",
+    "electron:build": "npm run build && electron-builder",
+    "cap:sync": "npm run build && cap sync",
+    "cap:android": "npm run build && cap run android",
+    "cap:ios": "npm run build && cap run ios",
+    "lint": "tsc --noEmit",
+    "ios:open": "npm run build && npx cap sync ios && npx cap open ios",
+    "init:android": "npm run build && npx cap add android",
+    "init:ios": "npm run build && npx cap add ios",
+    "fix:android": "echo 'Please manually delete the android folder and run: npm run init:android'",
+    "reinit:android": "echo 'IMPORTANT: Manually delete the \"android\" folder first if it exists!' && npm run init:android",
+    "make:apk": "npm run build && npx cap sync && npx cap open android",
+    "open:android": "npm run build && npx cap sync android && npx cap open android",
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@google/genai": "^1.42.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.19",
+    "@types/multer": "^2.1.0",
+    "better-sqlite3": "^12.8.0",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "d3": "^7.9.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.344.0",
+    "multer": "^2.1.1",
+    "node-fetch": "^3.3.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.1",
+    "tailwind-merge": "^2.3.0",
+    "three": "^0.160.0",
+    "three-bvh-csg": "^0.0.16",
+    "three-mesh-bvh": "^0.7.3",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.160.0",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.1",
+    "vite-plugin-pwa": "^0.19.8"
+  },
+  "build": {
+    "appId": "com.linguacnc.app",
+    "productName": "灵语智造",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron-main.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}

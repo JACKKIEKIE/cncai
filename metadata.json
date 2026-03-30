@@ -1,0 +1,8 @@
+{
+  "name": "灵语智造 (LinguaCNC)",
+  "description": "一个由大学生发起、社区驱动的开源 AI 数控编程平台，致力于打破传统 CAM 软件壁垒，探索 AI 智造的无限可能。",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
