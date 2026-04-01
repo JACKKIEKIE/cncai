@@ -6,11 +6,13 @@ import ChatPanel from './components/ChatPanel';
 import CodePanel from './components/CodePanel';
 import HistoryDrawer from './components/HistoryDrawer';
 import LiveSession from './components/LiveSession';
+import PublicDemoApp from './components/PublicDemoApp';
 import SetupSheet, { SetupSheetContent } from './components/SetupSheet';
 import SimulationPanel from './components/SimulationPanel';
 import ToolLibrary from './components/ToolLibrary';
 import { bootstrapNativePermissions } from './services/nativePermissionService';
 import { hasNativeIOSShell, postNativeShellMessage } from './services/nativeRuntimeService';
+import { isPublicDemoBuild } from './src/demoRuntime';
 import {
   buildSessionFromState,
   createTool,
@@ -121,7 +123,7 @@ const stageTransition = {
   transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] as const }
 };
 
-const App: React.FC = () => {
+const MainApp: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [operations, setOperations] = useState<OperationParams[]>([]);
   const [currentStock, setCurrentStock] = useState<StockDimensions>(DEFAULT_STOCK);
@@ -1102,5 +1104,7 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+const App: React.FC = () => (isPublicDemoBuild ? <PublicDemoApp /> : <MainApp />);
 
 export default App;

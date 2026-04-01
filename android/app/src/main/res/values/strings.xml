@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">灵语智造</string>
-    <string name="title_activity_main">灵语智造</string>
+    <string name="app_name">LinguaCNC</string>
+    <string name="title_activity_main">LinguaCNC</string>
     <string name="package_name">com.cncopilot.app</string>
     <string name="custom_url_scheme">com.cncopilot.app</string>
 </resources>
